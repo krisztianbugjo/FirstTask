@@ -3,7 +3,8 @@ package com.example.task1
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.button_main
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,11 +14,10 @@ class MainActivity : AppCompatActivity() {
         button_main.setOnClickListener() {
             changeActivity()
         }
-
     }
 
     private fun changeActivity() {
-        val intent = Intent(this, SecondActivity::class.java).apply {}
+        val intent = Intent(this, SecondActivity::class.java)
         startActivity(intent)
     }
 }
