@@ -1,23 +1,20 @@
 package com.example.task1
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.button_main
-
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        button_main.setOnClickListener() {
-            changeActivity()
-        }
-    }
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
 
-    private fun changeActivity() {
-        val intent = Intent(this, SecondActivity::class.java)
-        startActivity(intent)
+        val fragment = FirstFragment()
+        fragmentTransaction.add(R.id.fragment_container, fragment)
+        fragmentTransaction.commit()
+
+
     }
 }
