@@ -5,24 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.fragment_first.first_button
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class FirstFragment : Fragment() {
-
+    lateinit var contacts: ArrayList<Contact>
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_first, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        first_button.setOnClickListener(){
-            changeFragment()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+            val rvContacts = view.findViewById<View>(R.id.rvContacts) as RecyclerView
+            contacts = Contact.createContactsList(20)
+            val adapter = ContactsAdapter(contacts, this)
+            rvContacts.adapter = adapter
+            rvContacts.layoutManager = LinearLayoutManager(requireContext())
         }
-    }
 
-    private fun changeFragment(){
+    fun changeFragment(){
         val fragment = SecondFragment()
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, fragment)
