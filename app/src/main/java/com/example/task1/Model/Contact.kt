@@ -1,4 +1,4 @@
-package com.example.task1
+package com.example.task1.Model
 
 class Contact(val name: String, val isOnline: Boolean) {
 
@@ -7,7 +7,12 @@ class Contact(val name: String, val isOnline: Boolean) {
             var lastContactId = 0
             val contacts = ArrayList<Contact>()
             for (i in 1..numContacts) {
-                contacts.add(Contact("Person " + ++lastContactId, i <= numContacts / 2))
+                contacts.add(
+                    Contact(
+                        "Person " + ++lastContactId,
+                        i <= numContacts / 2
+                    )
+                )
             }
             return contacts
         }

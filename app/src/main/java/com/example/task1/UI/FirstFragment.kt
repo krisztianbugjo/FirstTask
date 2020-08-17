@@ -1,4 +1,4 @@
-package com.example.task1
+package com.example.task1.UI
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.task1.Adapter.ContactsAdapter
+import com.example.task1.Model.Contact
+import com.example.task1.R
 
 class FirstFragment : Fragment() {
     lateinit var contacts: ArrayList<Contact>
