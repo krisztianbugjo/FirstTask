@@ -22,17 +22,30 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
             val rvContacts = view.findViewById<View>(R.id.rvContacts) as RecyclerView
-            contacts = Contact.createContactsList(20)
-            val adapter = ContactsAdapter(contacts, this)
+            contacts = createContactsList(20)
+            val adapter = ContactsAdapter(contacts) {changeFragment()}
             rvContacts.adapter = adapter
             rvContacts.layoutManager = LinearLayoutManager(requireContext())
         }
 
-    fun changeFragment(){
+    fun changeFragment() {
         val fragment = SecondFragment()
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    private fun createContactsList(numContacts: Int): ArrayList<Contact> {
+        var lastContactId = 0
+        val contacts = ArrayList<Contact>()
+        for (i in 1..numContacts) {
+            contacts.add(
+                Contact(
+                    "Person " + ++lastContactId
+                )
+            )
+        }
+        return contacts
     }
 }

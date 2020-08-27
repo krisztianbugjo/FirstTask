@@ -7,32 +7,26 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.task1.Model.Contact
 import com.example.task1.R
-import com.example.task1.UI.FirstFragment
 
-class ContactsAdapter(private val mContacts: List<Contact>, private val mFragment: FirstFragment) :
+class ContactsAdapter(private val contacts: List<Contact>, private var onClick: ()->Unit) :
     RecyclerView.Adapter<ContactsAdapter.ViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_contact, parent, false)
+        )
+
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+        viewHolder.nameTextView.setText(contacts.get(position).name)
+        viewHolder.setOnClickListener(View.OnClickListener { onClick() })
+
+    }
+
+    override fun getItemCount(): Int = contacts.size
+
     inner class ViewHolder(private val listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val nameTextView = itemView.findViewById<TextView>(R.id.contact_name)
         fun setOnClickListener(onClickListener: View.OnClickListener) {
             listItemView.setOnClickListener(onClickListener)
         }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val context = parent.context
-        val inflater = LayoutInflater.from(context)
-        val contactView = inflater.inflate(R.layout.item_contact, parent, false)
-        return ViewHolder(contactView)
-    }
-
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val contact: Contact = mContacts.get(position)
-        val textView = viewHolder.nameTextView
-        textView.setText(contact.name)
-        viewHolder.setOnClickListener(View.OnClickListener { mFragment.changeFragment() })
-    }
-
-    override fun getItemCount(): Int {
-        return mContacts.size
     }
 }
