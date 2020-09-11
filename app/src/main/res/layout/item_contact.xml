@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/basic_margin_height"
-    android:background="@color/colorAccent">
+    android:background="@color/colorAccent"
+    android:orientation="horizontal">
+
 
     <TextView
-        android:id="@+id/contact_name"
+        android:id="@+id/movie_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
-        android:textSize="@dimen/basic_text_size"/>
+        android:layout_weight="1"
+        android:textSize="@dimen/basic_text_size" />
+
+    <TextView
+        android:id="@+id/movie_id"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:layout_weight="5"
+        android:textSize="@dimen/basic_text_size" />
 
 </LinearLayout>

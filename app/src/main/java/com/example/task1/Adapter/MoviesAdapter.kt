@@ -5,10 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.task1.Model.Contact
+import com.example.task1.Model.Movie
 import com.example.task1.R
 
-class ContactsAdapter(private val contacts: List<Contact>, private var onClick: ()->Unit) :
+class ContactsAdapter(private val movies: List<Movie>, private var onClick: (movie : Movie)->Unit) :
     RecyclerView.Adapter<ContactsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -16,15 +16,16 @@ class ContactsAdapter(private val contacts: List<Contact>, private var onClick: 
         )
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.nameTextView.setText(contacts.get(position).name)
-        viewHolder.setOnClickListener(View.OnClickListener { onClick() })
-
+        viewHolder.nameTextView.setText(movies[position].title)
+        viewHolder.idTextView.setText(movies[position].id)
+        viewHolder.setOnClickListener(View.OnClickListener { onClick(movies[position]) })
     }
 
-    override fun getItemCount(): Int = contacts.size
+    override fun getItemCount(): Int = movies.size
 
     inner class ViewHolder(private val listItemView: View) : RecyclerView.ViewHolder(listItemView) {
-        val nameTextView = itemView.findViewById<TextView>(R.id.contact_name)
+        val nameTextView = itemView.findViewById<TextView>(R.id.movie_title)
+        val idTextView = itemView.findViewById<TextView>(R.id.movie_id)
         fun setOnClickListener(onClickListener: View.OnClickListener) {
             listItemView.setOnClickListener(onClickListener)
         }

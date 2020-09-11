@@ -4,15 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.task1.Adapter.ContactsAdapter
-import com.example.task1.Model.Contact
+import com.example.task1.Model.Movie
 import com.example.task1.R
 
 class FirstFragment : Fragment() {
-    lateinit var contacts: ArrayList<Contact>
+    lateinit var movies: ArrayList<Movie>
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -22,27 +23,30 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
             val rvContacts = view.findViewById<View>(R.id.rvContacts) as RecyclerView
-            contacts = createContactsList(20)
-            val adapter = ContactsAdapter(contacts) {changeFragment()}
+            movies = createContactsList(20)
+            val adapter = ContactsAdapter(movies) {movie ->  changeFragment(movie)}
             rvContacts.adapter = adapter
             rvContacts.layoutManager = LinearLayoutManager(requireContext())
         }
 
-    fun changeFragment() {
+    fun changeFragment(movie : Movie) {
         val fragment = SecondFragment()
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, fragment)
         transaction.addToBackStack(null)
+        val bundle = bundleOf("title" to movie.title)
+        fragment.arguments = bundle
         transaction.commit()
     }
 
-    private fun createContactsList(numContacts: Int): ArrayList<Contact> {
+    private fun createContactsList(numContacts: Int): ArrayList<Movie> {
         var lastContactId = 0
-        val contacts = ArrayList<Contact>()
+        val contacts = ArrayList<Movie>()
         for (i in 1..numContacts) {
             contacts.add(
-                Contact(
-                    "Person " + ++lastContactId
+                Movie(
+                    "Movie " + ++lastContactId,
+                    "ID:" + (lastContactId).toString()
                 )
             )
         }
