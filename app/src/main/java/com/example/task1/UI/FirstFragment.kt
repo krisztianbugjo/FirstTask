@@ -8,7 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.task1.Adapter.ContactsAdapter
+import com.example.task1.Adapter.MovieAdapter
 import com.example.task1.Model.Movie
 import com.example.task1.R
 
@@ -22,14 +22,14 @@ class FirstFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-            val rvContacts = view.findViewById<View>(R.id.rvContacts) as RecyclerView
-            movies = createContactsList(20)
-            val adapter = ContactsAdapter(movies) {movie ->  changeFragment(movie)}
-            rvContacts.adapter = adapter
-            rvContacts.layoutManager = LinearLayoutManager(requireContext())
-        }
+        val rvContacts = view.findViewById<View>(R.id.rvContacts) as RecyclerView
+        movies = createMovieList(20)
+        val adapter = MovieAdapter(movies) { movie -> changeFragment(movie) }
+        rvContacts.adapter = adapter
+        rvContacts.layoutManager = LinearLayoutManager(requireContext())
+    }
 
-    fun changeFragment(movie : Movie) {
+    fun changeFragment(movie: Movie) {
         val fragment = SecondFragment()
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, fragment)
@@ -39,17 +39,17 @@ class FirstFragment : Fragment() {
         transaction.commit()
     }
 
-    private fun createContactsList(numContacts: Int): ArrayList<Movie> {
-        var lastContactId = 0
-        val contacts = ArrayList<Movie>()
-        for (i in 1..numContacts) {
-            contacts.add(
+    private fun createMovieList(numMovies: Int): ArrayList<Movie> {
+        var lastMovieId = 0
+        val movies = ArrayList<Movie>()
+        for (i in 1..numMovies) {
+            movies.add(
                 Movie(
-                    "Movie " + ++lastContactId,
-                    "ID:" + (lastContactId).toString()
+                    "ID:" + (lastMovieId).toString(),
+                    "Movie " + ++lastMovieId
                 )
             )
         }
-        return contacts
+        return movies
     }
 }

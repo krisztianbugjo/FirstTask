@@ -8,11 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.task1.Model.Movie
 import com.example.task1.R
 
-class ContactsAdapter(private val movies: List<Movie>, private var onClick: (movie : Movie)->Unit) :
-    RecyclerView.Adapter<ContactsAdapter.ViewHolder>() {
+class MovieAdapter(
+    private val movies: List<Movie>,
+    private var onClick: (movie: Movie) -> Unit
+) :
+    RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_contact, parent, false)
+        ViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_contact, parent, false)
         )
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {

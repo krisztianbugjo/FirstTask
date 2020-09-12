@@ -18,7 +18,7 @@ class SecondFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(arguments?.getString("title")!= null){
+        if (arguments?.getString("title") != null) {
             second_text.text = arguments?.getString("title")
         }
     }
