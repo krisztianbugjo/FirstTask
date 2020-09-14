@@ -3,4 +3,5 @@
     <string name="first_title">FirstFragment</string>
     <string name="switch_first_button">Switch</string>
     <string name="second_title">SecondFragment</string>
+    <string name="search_text">Search for movie</string>
 </resources>
