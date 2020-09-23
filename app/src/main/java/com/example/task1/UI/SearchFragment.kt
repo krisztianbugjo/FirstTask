@@ -13,13 +13,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.task1.Adapter.MovieAdapter
 import com.example.task1.Model.Movie
+import com.example.task1.Model.MovieResults
 import com.example.task1.R
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.android.synthetic.main.fragment_search.search_text
 import java.util.Timer
 import java.util.TimerTask
 
 class FirstFragment : Fragment() {
-    lateinit var movies: ArrayList<Movie>
+    lateinit var movies: List<Movie>
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -29,7 +32,7 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val rvContacts = view.findViewById<View>(R.id.rvContacts) as RecyclerView
-        movies = createMovieList(20)
+        movies = createMovieList()
         val adapter = MovieAdapter(movies) { movie -> changeFragment(movie) }
         rvContacts.adapter = adapter
         rvContacts.layoutManager = LinearLayoutManager(requireContext())
@@ -41,7 +44,7 @@ class FirstFragment : Fragment() {
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, fragment)
         transaction.addToBackStack(null)
-        val bundle = bundleOf("title" to movie.title)
+        val bundle = bundleOf("movie" to movie)
         fragment.arguments = bundle
         transaction.commit()
     }
@@ -52,9 +55,11 @@ class FirstFragment : Fragment() {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                     //no-op
                 }
+
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
                     //no-op
                 }
+
                 private var timer: Timer = Timer()
                 private val DELAY: Long = 500 // milliseconds
                 override fun afterTextChanged(s: Editable) {
@@ -64,8 +69,12 @@ class FirstFragment : Fragment() {
                         object : TimerTask() {
                             override fun run() {
                                 requireActivity().runOnUiThread(java.lang.Runnable {
-                                    if(search_text.text.isNotEmpty()) {
-                                        Toast.makeText(context, search_text.text, Toast.LENGTH_SHORT)
+                                    if (search_text.text.isNotEmpty()) {
+                                        Toast.makeText(
+                                            context,
+                                            search_text.text,
+                                            Toast.LENGTH_SHORT
+                                        )
                                             .show()
                                     }
                                 })
@@ -78,17 +87,15 @@ class FirstFragment : Fragment() {
         )
     }
 
-    private fun createMovieList(numMovies: Int): ArrayList<Movie> {
-        var lastMovieId = 0
-        val movies = ArrayList<Movie>()
-        for (i in 1..numMovies) {
-            movies.add(
-                Movie(
-                    "ID:" + (lastMovieId).toString(),
-                    "Movie " + ++lastMovieId
-                )
-            )
-        }
-        return movies
+    private fun createMovieList(): List<Movie> {
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+        val myJson =
+            requireActivity().assets.open("example.json").bufferedReader().use { it.readText() }
+        val movieAdapter = moshi.adapter(MovieResults::class.java)
+        val movies = movieAdapter.fromJson(myJson)
+        return movies!!.results
+
     }
 }

@@ -1,0 +1,29 @@
+{
+ "results":[
+  {
+   "id":1,
+   "release_date":1995,
+   "title":"Movie1",
+   "vote_average":9.5
+  },
+  {
+   "id":2,
+   "release_date":1996,
+   "title":"Movie2",
+   "vote_average":8.0
+  },
+  {
+   "id":3,
+   "release_date":1997,
+   "title":"Movie3",
+   "vote_average":6.3
+  },
+  {
+   "id":4,
+   "release_date":1990,
+   "title":"Movie4",
+   "vote_average":6.3
+  }
+ ],
+ "total_results":3
+}
