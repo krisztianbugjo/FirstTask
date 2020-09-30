@@ -1,6 +1,8 @@
 package com.example.task1.UI
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -32,10 +34,15 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val rvContacts = view.findViewById<View>(R.id.rvContacts) as RecyclerView
-        movies = createMovieList()
-        val adapter = MovieAdapter(movies) { movie -> changeFragment(movie) }
-        rvContacts.adapter = adapter
-        rvContacts.layoutManager = LinearLayoutManager(requireContext())
+        val handler = Handler(Looper.getMainLooper())
+        Thread {
+            movies = createMovieList()
+            handler.post {
+                val adapter = MovieAdapter(movies) { movie -> changeFragment(movie) }
+                rvContacts.adapter = adapter
+                rvContacts.layoutManager = LinearLayoutManager(requireContext())
+            }
+        }.start()
         initSearchText()
     }
 
@@ -56,7 +63,12 @@ class FirstFragment : Fragment() {
                     //no-op
                 }
 
-                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                override fun beforeTextChanged(
+                    s: CharSequence,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
                     //no-op
                 }
 
@@ -87,15 +99,20 @@ class FirstFragment : Fragment() {
         )
     }
 
+    private fun openFile(): String {
+        val myJson = requireActivity()
+            .assets
+            .open("example.json")
+            .bufferedReader().use { it.readText() }
+        return myJson
+    }
+
     private fun createMovieList(): List<Movie> {
         val moshi = Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
             .build()
-        val myJson =
-            requireActivity().assets.open("example.json").bufferedReader().use { it.readText() }
         val movieAdapter = moshi.adapter(MovieResults::class.java)
-        val movies = movieAdapter.fromJson(myJson)
+        val movies = movieAdapter.fromJson(openFile())
         return movies!!.results
-
     }
 }
