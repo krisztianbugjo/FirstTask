@@ -5,11 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.task1.Model.Movie
 import com.example.task1.R
+import com.example.task1.network.Model.Movie
 
 class MovieAdapter(
-    private val movies: List<Movie>,
+    private var movies: List<Movie>,
     private var onClick: (movie: Movie) -> Unit
 ) :
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
@@ -26,6 +26,16 @@ class MovieAdapter(
     }
 
     override fun getItemCount(): Int = movies.size
+
+    fun changeMovieList(movies : List<Movie>){
+        this.movies = movies
+        notifyDataSetChanged()
+    }
+
+    fun clearMovieList(){
+        movies = emptyList()
+        notifyDataSetChanged()
+    }
 
     inner class ViewHolder(private val listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val nameTextView = itemView.findViewById<TextView>(R.id.movie_title)

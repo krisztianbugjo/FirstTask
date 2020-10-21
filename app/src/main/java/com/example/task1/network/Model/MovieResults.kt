@@ -1,4 +1,4 @@
-package com.example.task1.Model
+package com.example.task1.network.Model
 
 import android.os.Parcelable
 import com.squareup.moshi.Json

@@ -8,23 +8,22 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.task1.Adapter.MovieAdapter
-import com.example.task1.Model.Movie
-import com.example.task1.Model.MovieResults
 import com.example.task1.R
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.example.task1.controller.MovieController
+import com.example.task1.network.Model.Movie
+import com.example.task1.network.ServerResponseListener
 import kotlinx.android.synthetic.main.fragment_search.search_text
 import java.util.Timer
 import java.util.TimerTask
 
 class FirstFragment : Fragment() {
     lateinit var movies: List<Movie>
+    lateinit var adapter : MovieAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,9 +35,9 @@ class FirstFragment : Fragment() {
         val rvContacts = view.findViewById<View>(R.id.rvContacts) as RecyclerView
         val handler = Handler(Looper.getMainLooper())
         Thread {
-            movies = createMovieList()
+            movies = emptyList()
             handler.post {
-                val adapter = MovieAdapter(movies) { movie -> changeFragment(movie) }
+                adapter = MovieAdapter(movies) { movie -> changeFragment(movie) }
                 rvContacts.adapter = adapter
                 rvContacts.layoutManager = LinearLayoutManager(requireContext())
             }
@@ -81,13 +80,10 @@ class FirstFragment : Fragment() {
                         object : TimerTask() {
                             override fun run() {
                                 requireActivity().runOnUiThread(java.lang.Runnable {
-                                    if (search_text.text.isNotEmpty()) {
-                                        Toast.makeText(
-                                            context,
-                                            search_text.text,
-                                            Toast.LENGTH_SHORT
-                                        )
-                                            .show()
+                                    if (s.isNotEmpty()) {
+                                        getMovieList(s)
+                                    }else{
+                                        adapter.clearMovieList()
                                     }
                                 })
                             }
@@ -99,20 +95,11 @@ class FirstFragment : Fragment() {
         )
     }
 
-    private fun openFile(): String {
-        val myJson = requireActivity()
-            .assets
-            .open("example.json")
-            .bufferedReader().use { it.readText() }
-        return myJson
-    }
-
-    private fun createMovieList(): List<Movie> {
-        val moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
-        val movieAdapter = moshi.adapter(MovieResults::class.java)
-        val movies = movieAdapter.fromJson(openFile())
-        return movies!!.results
+    fun getMovieList(s : Editable) {
+        MovieController().searchMovies(s, object : ServerResponseListener {
+            override fun getResult(results: List<Movie>) {
+                adapter.changeMovieList(results)
+            }
+        })
     }
 }

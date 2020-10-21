@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.task1.Model.Movie
+import com.example.task1.network.Model.Movie
 import com.example.task1.R
 import kotlinx.android.synthetic.main.fragment_second.second_text
 
