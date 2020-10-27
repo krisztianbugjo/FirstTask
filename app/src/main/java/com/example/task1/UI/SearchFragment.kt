@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.task1.Adapter.MovieAdapter
 import com.example.task1.R
-import com.example.task1.controller.MovieController
+import com.example.task1.controller.MovieController.searchMovies
 import com.example.task1.network.Model.Movie
 import com.example.task1.network.ServerResponseListener
 import kotlinx.android.synthetic.main.fragment_search.search_text
@@ -23,7 +23,7 @@ import java.util.TimerTask
 
 class FirstFragment : Fragment() {
     lateinit var movies: List<Movie>
-    lateinit var adapter : MovieAdapter
+    lateinit var adapter: MovieAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -82,7 +82,7 @@ class FirstFragment : Fragment() {
                                 requireActivity().runOnUiThread(java.lang.Runnable {
                                     if (s.isNotEmpty()) {
                                         getMovieList(s)
-                                    }else{
+                                    } else {
                                         adapter.clearMovieList()
                                     }
                                 })
@@ -95,8 +95,8 @@ class FirstFragment : Fragment() {
         )
     }
 
-    fun getMovieList(s : Editable) {
-        MovieController().searchMovies(s, object : ServerResponseListener {
+    fun getMovieList(s: Editable) {
+        searchMovies(s, object : ServerResponseListener {
             override fun getResult(results: List<Movie>) {
                 adapter.changeMovieList(results)
             }

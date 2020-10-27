@@ -14,28 +14,34 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-class MovieController {
+const val baseUrl: String = "https://api.themoviedb.org/3/"
 
-    val moshi : Moshi = Moshi.Builder().build()
+object MovieController {
+
+    val moshi: Moshi = Moshi.Builder().build()
+
+    val retrofit = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .client(OkHttpClient.Builder().build())
+        .build()
+
+    val movieApi: MovieApi = retrofit.create(MovieApi::class.java)
 
     fun searchMovies(query: Editable, serverResponseListener: ServerResponseListener) {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .client(OkHttpClient.Builder().build())
-            .build()
+        movieApi.listMovies(BuildConfig.MOVIE_API_KEY, query)
+            .enqueue(object : Callback<MovieResults> {
+                override fun onFailure(call: Call<MovieResults>, t: Throwable) {
+                    Log.v("retrofit", "call failed")
+                }
 
-        val movieApi: MovieApi = retrofit.create(MovieApi::class.java)
-
-        movieApi.listMovies(BuildConfig.MOVIE_API_KEY, query).enqueue(object : Callback<MovieResults> {
-            override fun onFailure(call: Call<MovieResults>, t: Throwable) {
-                Log.v("retrofit", "call failed")
-            }
-
-            override fun onResponse(call: Call<MovieResults>, response: Response<MovieResults>) {
-            val movieResults : MovieResults = response.body()!!
-                serverResponseListener.getResult(movieResults.results)
-            }
-        })
+                override fun onResponse(
+                    call: Call<MovieResults>,
+                    response: Response<MovieResults>
+                ) {
+                    val movieResults: MovieResults = response.body()!!
+                    serverResponseListener.getResult(movieResults.results)
+                }
+            })
     }
 }

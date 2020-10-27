@@ -11,6 +11,6 @@ interface MovieApi {
     @GET("search/movie")
     fun listMovies(
         @Query("api_key") apiKey: String,
-        @Query("query") query : Editable
-    ) : Call<MovieResults>
+        @Query("query") query: Editable
+    ): Call<MovieResults>
 }

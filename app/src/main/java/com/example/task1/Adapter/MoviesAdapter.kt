@@ -27,12 +27,12 @@ class MovieAdapter(
 
     override fun getItemCount(): Int = movies.size
 
-    fun changeMovieList(movies : List<Movie>){
+    fun changeMovieList(movies: List<Movie>) {
         this.movies = movies
         notifyDataSetChanged()
     }
 
-    fun clearMovieList(){
+    fun clearMovieList() {
         movies = emptyList()
         notifyDataSetChanged()
     }
