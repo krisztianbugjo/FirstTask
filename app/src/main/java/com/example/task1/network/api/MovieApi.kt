@@ -13,4 +13,10 @@ interface MovieApi {
         @Query("api_key") apiKey: String,
         @Query("query") query: Editable
     ): Call<MovieResults>
+
+    @GET("movie/top_rated")
+    fun listPopularMovies(
+        @Query("api_key") apiKey: String
+    ): Call<MovieResults>
+
 }

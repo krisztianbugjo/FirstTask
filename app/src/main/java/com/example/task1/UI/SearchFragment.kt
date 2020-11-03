@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.task1.Adapter.MovieAdapter
 import com.example.task1.R
 import com.example.task1.controller.MovieController.searchMovies
+import com.example.task1.controller.MovieController.searchPopularMovies
 import com.example.task1.network.Model.Movie
 import com.example.task1.network.ServerResponseListener
 import kotlinx.android.synthetic.main.fragment_search.search_text
@@ -36,6 +37,7 @@ class FirstFragment : Fragment() {
         val handler = Handler(Looper.getMainLooper())
         Thread {
             movies = emptyList()
+            getPopularMovieList()
             handler.post {
                 adapter = MovieAdapter(movies) { movie -> changeFragment(movie) }
                 rvContacts.adapter = adapter
@@ -83,7 +85,8 @@ class FirstFragment : Fragment() {
                                     if (s.isNotEmpty()) {
                                         getMovieList(s)
                                     } else {
-                                        adapter.clearMovieList()
+                                        //adapter.clearMovieList()
+                                        getPopularMovieList()
                                     }
                                 })
                             }
@@ -97,6 +100,14 @@ class FirstFragment : Fragment() {
 
     fun getMovieList(s: Editable) {
         searchMovies(s, object : ServerResponseListener {
+            override fun getResult(results: List<Movie>) {
+                adapter.changeMovieList(results)
+            }
+        })
+    }
+
+    fun getPopularMovieList() {
+        searchPopularMovies(object : ServerResponseListener {
             override fun getResult(results: List<Movie>) {
                 adapter.changeMovieList(results)
             }

@@ -44,4 +44,21 @@ object MovieController {
                 }
             })
     }
+
+    fun searchPopularMovies(serverResponseListener: ServerResponseListener) {
+        movieApi.listPopularMovies(BuildConfig.MOVIE_API_KEY)
+            .enqueue(object : Callback<MovieResults> {
+                override fun onFailure(call: Call<MovieResults>, t: Throwable) {
+                    Log.v("retrofit", "call failed")
+                }
+
+                override fun onResponse(
+                    call: Call<MovieResults>,
+                    response: Response<MovieResults>
+                ) {
+                    val movieResults: MovieResults = response.body()!!
+                    serverResponseListener.getResult(movieResults.results)
+                }
+            })
+    }
 }
