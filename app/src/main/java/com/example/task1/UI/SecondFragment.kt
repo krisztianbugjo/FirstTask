@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.task1.network.Model.Movie
 import com.example.task1.R
-import kotlinx.android.synthetic.main.fragment_second.second_text
-
+import com.example.task1.controller.MovieController
+import com.example.task1.network.Model.Movie
+import com.example.task1.network.ServerResponseListenerForMovie
+import kotlinx.android.synthetic.main.fragment_second.second_release_date
+import kotlinx.android.synthetic.main.fragment_second.second_title
+import kotlinx.android.synthetic.main.fragment_second.second_vote_average
 
 class SecondFragment : Fragment() {
 
@@ -20,9 +23,20 @@ class SecondFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (arguments?.getParcelable<Movie>("movie") != null) {
-            second_text.text = arguments?.getParcelable<Movie>("movie")!!.title
-
+        if (arguments?.get("movieID") != null) {
+            getMoviesById((arguments?.get("movieID") as Int?)!!)
+        } else {
+            second_title.text = "id fail"
         }
+    }
+
+    fun getMoviesById(s: Int) {
+        MovieController.searchMoviesById(s, object : ServerResponseListenerForMovie {
+            override fun getResult(result: Movie) {
+                second_title.text = result.title
+                second_release_date.text = result.releaseDate
+                second_vote_average.text = result.voteAverage.toString()
+            }
+        })
     }
 }

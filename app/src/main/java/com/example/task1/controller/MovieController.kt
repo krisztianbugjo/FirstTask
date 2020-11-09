@@ -3,10 +3,13 @@ package com.example.task1.controller
 import android.text.Editable
 import android.util.Log
 import com.example.task1.BuildConfig
+import com.example.task1.network.Model.Movie
 import com.example.task1.network.Model.MovieResults
 import com.example.task1.network.ServerResponseListener
+import com.example.task1.network.ServerResponseListenerForMovie
 import com.example.task1.network.api.MovieApi
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,7 +21,10 @@ const val baseUrl: String = "https://api.themoviedb.org/3/"
 
 object MovieController {
 
-    val moshi: Moshi = Moshi.Builder().build()
+    val moshi = Moshi.Builder()
+        .addLast(KotlinJsonAdapterFactory())
+        .build()
+
 
     val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
@@ -40,7 +46,7 @@ object MovieController {
                     response: Response<MovieResults>
                 ) {
                     val movieResults: MovieResults = response.body()!!
-                    serverResponseListener.getResult(movieResults.results)
+                    serverResponseListener.getResult(movieResults.results ?: emptyList())
                 }
             })
     }
@@ -57,7 +63,25 @@ object MovieController {
                     response: Response<MovieResults>
                 ) {
                     val movieResults: MovieResults = response.body()!!
-                    serverResponseListener.getResult(movieResults.results)
+                    serverResponseListener.getResult(movieResults.results ?: emptyList())
+                }
+            })
+    }
+
+    fun searchMoviesById(id: Int, serverResponseListener: ServerResponseListenerForMovie) {
+        movieApi.listMovieById(id, BuildConfig.MOVIE_API_KEY)
+            .enqueue(object : Callback<Movie> {
+                override fun onFailure(call: Call<Movie>, t: Throwable) {
+                    Log.v("retrofit", "call failed")
+                }
+
+                override fun onResponse(
+                    call: Call<Movie>,
+                    response: Response<Movie>
+                ) {
+                    val movie: Movie = response.body()!!
+                    serverResponseListener.getResult(movie)
+                    Log.v("response", "response is ok")
                 }
             })
     }

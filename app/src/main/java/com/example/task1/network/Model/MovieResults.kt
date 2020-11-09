@@ -6,6 +6,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class MovieResults(
-    val results: List<Movie>,
+    val results: List<Movie>? = emptyList(),
     @Json(name = "total_results") val totalResults: Int
 ) : Parcelable

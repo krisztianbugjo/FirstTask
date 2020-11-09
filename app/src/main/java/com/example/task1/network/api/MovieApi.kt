@@ -1,9 +1,11 @@
 package com.example.task1.network.api
 
 import android.text.Editable
+import com.example.task1.network.Model.Movie
 import com.example.task1.network.Model.MovieResults
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieApi {
@@ -18,5 +20,11 @@ interface MovieApi {
     fun listPopularMovies(
         @Query("api_key") apiKey: String
     ): Call<MovieResults>
+
+    @GET("movie/{movie_id}")
+    fun listMovieById(
+        @Path("movie_id") movie_id: Int,
+        @Query("api_key") apiKey: String
+    ): Call<Movie>
 
 }
