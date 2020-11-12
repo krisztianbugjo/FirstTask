@@ -21,7 +21,7 @@ class MovieAdapter(
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.nameTextView.setText(movies[position].title)
-        viewHolder.idTextView.setText(movies[position].id.toString())
+        viewHolder.idTextView.setText(movies[position].id)
         viewHolder.setOnClickListener(View.OnClickListener { onClick(movies[position]) })
     }
 

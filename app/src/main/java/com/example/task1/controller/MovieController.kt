@@ -1,7 +1,6 @@
 package com.example.task1.controller
 
 import android.text.Editable
-import android.util.Log
 import com.example.task1.BuildConfig
 import com.example.task1.network.Model.Movie
 import com.example.task1.network.Model.MovieResults
@@ -38,7 +37,7 @@ object MovieController {
         movieApi.listMovies(BuildConfig.MOVIE_API_KEY, query)
             .enqueue(object : Callback<MovieResults> {
                 override fun onFailure(call: Call<MovieResults>, t: Throwable) {
-                    Log.v("retrofit", "call failed")
+                    //no-op
                 }
 
                 override fun onResponse(
@@ -55,7 +54,7 @@ object MovieController {
         movieApi.listPopularMovies(BuildConfig.MOVIE_API_KEY)
             .enqueue(object : Callback<MovieResults> {
                 override fun onFailure(call: Call<MovieResults>, t: Throwable) {
-                    Log.v("retrofit", "call failed")
+                    //no-op
                 }
 
                 override fun onResponse(
@@ -72,7 +71,7 @@ object MovieController {
         movieApi.listMovieById(id, BuildConfig.MOVIE_API_KEY)
             .enqueue(object : Callback<Movie> {
                 override fun onFailure(call: Call<Movie>, t: Throwable) {
-                    Log.v("retrofit", "call failed")
+                    //no-op
                 }
 
                 override fun onResponse(
@@ -81,7 +80,6 @@ object MovieController {
                 ) {
                     val movie: Movie = response.body()!!
                     serverResponseListener.getResult(movie)
-                    Log.v("response", "response is ok")
                 }
             })
     }

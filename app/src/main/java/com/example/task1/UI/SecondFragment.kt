@@ -23,10 +23,8 @@ class SecondFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (arguments?.get("movieID") != null) {
-            getMoviesById((arguments?.get("movieID") as Int?)!!)
-        } else {
-            second_title.text = "id fail"
+        arguments?.getInt("movieID")?.let { movieId ->
+            getMoviesById(movieId)
         }
     }
 

@@ -52,7 +52,6 @@ class FirstFragment : Fragment() {
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, fragment)
         transaction.addToBackStack(null)
-        //Log.i("movieComponent1:", movie.component1().toString())
         val bundle = bundleOf("movieID" to movie.id)
         fragment.arguments = bundle
         transaction.commit()
